@@ -1,0 +1,8 @@
+word: 1      actual frequency: 605664 estimated frequency: 1348419.698
+word: 340    actual frequency: 3305   estimated frequency: 2680.348
+word: 357    actual frequency: 3074   estimated frequency: 2544.355
+word: 631    actual frequency: 1638   estimated frequency: 1385.447
+word: 2520   actual frequency: 372    estimated frequency: 316.080
+word: 3543   actual frequency: 252    estimated frequency: 219.726
+word: 9640   actual frequency: 76     estimated frequency: 75.502
+k: 1348419.698,  alpha: -1.067

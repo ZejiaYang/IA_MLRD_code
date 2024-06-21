@@ -102,6 +102,8 @@ def main():
     """
     dice_data = load_dice_data(os.path.join('data', 'markov_models', 'dice_dataset'))
     transition_probs, emission_probs = estimate_hmm(dice_data)
+    print(transition_probs)
+    print(emission_probs)
     print(f"The transition probabilities of the HMM:")
     print_matrices(transition_probs)
     print(f"The emission probabilities of the HMM:")

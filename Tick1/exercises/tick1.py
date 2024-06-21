@@ -3,12 +3,12 @@ import os
 import pandas as pd
 import sys
 
-sys.path.append('/Users/yangzejia/Desktop/PartIA/mlrd/')
+sys.path.append('/Users/yangzejia/Desktop/PartIA/mlrd/Tick1')
 from utils.sentiment_detection import read_tokens, load_reviews
 # train_test_validate
 # train_test_split () be split into two groups
 
-factor = 10
+factor = 1
 
 def read_lexicon(filename: str) -> Dict[str, int]:
     """
@@ -81,7 +81,7 @@ def predict_sentiment_improved(review: List[str], lexicon: pd.DataFrame) -> int:
     for token in review:
         if token in lexicon.keys():
             sentiment += lexicon[token]
-    if sentiment > 38:
+    if sentiment > 2:
         return 1
     else:
         return -1

@@ -3,7 +3,7 @@ import os, math, random
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-sys.path.append('/Users/yangzejia/Desktop/PartIA/mlrd/Task2')
+sys.path.append('/Users/yangzejia/Desktop/PartIA/mlrd/Tick2')
 from utils.sentiment_detection import read_tokens, load_reviews, split_data
 from exercises.tick1 import accuracy, predict_sentiment, read_lexicon
 
@@ -39,11 +39,11 @@ def calculate_unsmoothed_log_probabilities(training_data: List[Dict[str, Union[L
     """
     pos = {}
     neg = {}
-    vocab = set()
+    # vocab = set()
     for data in training_data:
         for token in data['text']:
-            if token not in vocab:
-                vocab.add(token)
+            # if token not in vocab:
+            #     vocab.add(token)
             
             if data['sentiment'] == 1:
                 if token in pos.keys():
@@ -63,8 +63,8 @@ def calculate_unsmoothed_log_probabilities(training_data: List[Dict[str, Union[L
     for neg_token in neg.keys():
         neg[neg_token] = math.log(neg[neg_token] / neg_total)
     
-    pos['unknown'] = math.log(1 / len(vocab))
-    neg['unknown'] = math.log(1 / len(vocab))  
+    pos['unknown'] = 0
+    neg['unknown'] = 0  
     return {1: pos, -1: neg}
 
 def calculate_binary_unsmoothed_log_probabilities(training_data: List[Dict[str, Union[List[str], int]]]) \
@@ -148,8 +148,8 @@ def calculate_smoothed_log_probabilities(training_data: List[Dict[str, Union[Lis
     
     for neg_token in neg.keys():
         neg[neg_token] = math.log((neg[neg_token] + smooth)/ neg_total)
-    pos['unknown'] = math.log(1 / len(vocab))
-    neg['unknown'] = math.log(1 / len(vocab))
+    pos['unknown'] = math.log(1 / pos_total)
+    neg['unknown'] = math.log(1 / neg_total)
     return {1: pos, -1: neg}
 
 def calculate_binary_smooth_log_probabilities(training_data: List[Dict[str, Union[List[str], int]]], smooth:int = 1) \
@@ -212,11 +212,11 @@ def predict_sentiment_nbc(review: List[str], log_probabilities: Dict[int, Dict[s
     neg_prob = class_log_probabilities[-1]
     pos_dict = log_probabilities[1]
     neg_dict = log_probabilities[-1]
-    review_word = set()
+    # review_word = set()
     for token in review:
-        if token in review_word:
-            continue
-        review_word.add(token)
+        # if token in review_word:
+        #     continue
+        # review_word.add(token)
         if token in pos_dict.keys():
             pos_prob += pos_dict[token]
         else:
@@ -253,7 +253,7 @@ def main():
     print(f"Your accuracy using simple classifier: {acc_simple}")
 
     class_priors = calculate_class_log_probabilities(train_tokenized_data)
-    unsmoothed_log_probabilities = calculate_binary_unsmoothed_log_probabilities(train_tokenized_data)
+    unsmoothed_log_probabilities = calculate_unsmoothed_log_probabilities(train_tokenized_data)
     preds_unsmoothed = []
     for review in dev_tokenized_data:
         pred = predict_sentiment_nbc(review, unsmoothed_log_probabilities, class_priors)
@@ -262,7 +262,7 @@ def main():
     acc_unsmoothed = accuracy(preds_unsmoothed, validation_sentiments)
     print(f"Your accuracy using unsmoothed probabilities: {acc_unsmoothed}")
 
-    smoothed_log_probabilities = calculate_binary_smooth_log_probabilities(train_tokenized_data)
+    smoothed_log_probabilities = calculate_smoothed_log_probabilities(train_tokenized_data)
     preds_smoothed = []
     for review in dev_tokenized_data:
         pred = predict_sentiment_nbc(review, smoothed_log_probabilities, class_priors)
